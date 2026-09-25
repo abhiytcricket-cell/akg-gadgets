@@ -243,7 +243,7 @@ function setupEventListeners() {
     const openAdmin = (e) => {
         e.preventDefault();
         const passwordInput = prompt("Enter Admin Secret Password:");
-        const secureAdminPassword = "Akgholesale@123"; 
+        const secureAdminPassword = "Unisoasi@1980"; 
 
         if (passwordInput === secureAdminPassword) {
             adminModal.classList.add('active');

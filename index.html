@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AKG Wholesale Store - Mobile Accessories & Parts Wholesale</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Top Announcement Bar -->
+    <div class="top-bar">
+        <div class="container flex-between">
+            <div class="top-contact">
+                <span><i class="fas fa-phone-alt"></i> <a href="tel:+919888136663" id="topPhoneText">+91 98881-36663</a></span>
+                <span><i class="fas fa-envelope"></i> supportakgwholesalestore@gmail.com</span>
+            </div>
+            <div class="top-links">
+                <span><i class="fas fa-shipping-fast"></i> Pan-India Wholesale Delivery</span>
+                <button id="adminLoginBtn" class="admin-btn"><i class="fas fa-lock"></i> Admin Panel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header -->
+    <header class="main-header">
+        <div class="container flex-between">
+            <div class="logo-area">
+                <h1>AKG <span class="highlight">WHOLESALE</span></h1>
+                <p>B2B Mobile Parts & Accessories Hub</p>
+            </div>
+            
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Search by model, brand, or part name...">
+                <button id="searchBtn"><i class="fas fa-search"></i></button>
+            </div>
+
+            <div class="header-actions">
+                <a href="#" id="whatsappBtn" class="action-icon whatsapp-link" target="_blank">
+                    <i class="fab fa-whatsapp"></i>
+                    <span>WhatsApp</span>
+                </a>
+                <div class="action-icon cart-trigger" id="cartTrigger">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="badge" id="cartCount">0</span>
+                    <span>Cart</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container">
+            <ul class="nav-links" id="categoryNav">
+                <li><a href="#" class="cat-link active" data-category="all">All Products</a></li>
+                <li><a href="#" class="cat-link" data-category="Displays">LCD / Displays</a></li>
+                <li><a href="#" class="cat-link" data-category="Chargers">Chargers & Cables</a></li>
+                <li><a href="#" class="cat-link" data-category="Batteries">Mobile Batteries</a></li>
+                <li><a href="#" class="cat-link" data-category="Smart Watches">Smart Watches</a></li>
+                <li><a href="#" class="cat-link" data-category="Power Banks">Power Banks</a></li>
+                <li><a href="#" class="cat-link" data-category="Speakers">Speakers & Audio</a></li>
+                <li><a href="#" class="cat-link" data-category="Gamepads">Gamepads & Controllers</a></li>
+                <li><a href="#" class="cat-link" data-category="Back Covers">Back Covers & Glass</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Banner -->
+    <section class="hero">
+        <div class="container hero-content">
+            <div class="hero-text">
+                <h2>India's Trusted B2B Wholesale Store</h2>
+                <p>Get premium quality mobile spare parts, accessories, and tools at direct factory wholesale prices. Bulk orders only.</p>
+                <div class="hero-features">
+                    <span><i class="fas fa-check-circle"></i> 100% Tested Quality</span>
+                    <span><i class="fas fa-check-circle"></i> Best Market Rates</span>
+                    <span><i class="fas fa-check-circle"></i> Fast Dispatch</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <main class="container main-shop">
+        <div class="section-title">
+            <h3 id="currentCategoryTitle">Wholesale Catalog</h3>
+            <span id="productCountBadge">Showing items</span>
+        </div>
+
+        <div class="product-grid" id="productGrid">
+            <!-- Products injected dynamically via JavaScript -->
+        </div>
+    </main>
+
+    <!-- Floating WhatsApp Button -->
+    <a href="#" id="floatingWhatsapp" class="float-whatsapp" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- Cart Drawer -->
+    <div class="cart-drawer" id="cartDrawer">
+        <div class="cart-header">
+            <h3>Wholesale Order List</h3>
+            <button id="closeCart" class="close-btn">&times;</button>
+        </div>
+        <div class="cart-body" id="cartBody">
+            <!-- Cart Items -->
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Estimated Total:</span>
+                <span id="cartTotalPrice">₹0</span>
+            </div>
+            <button id="checkoutBtn" class="checkout-btn"><i class="fab fa-whatsapp"></i> Send Order via WhatsApp</button>
+        </div>
+    </div>
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Admin Modal Panel -->
+    <div class="modal" id="adminModal">
+        <div class="modal-content admin-modal-box">
+            <div class="modal-header">
+                <h2><i class="fas fa-tools"></i> AKG Admin Dashboard</h2>
+                <button class="close-modal" id="closeAdmin">&times;</button>
+            </div>
+            
+            <div class="admin-tabs">
+                <button class="tab-btn active" data-tab="manageProducts">Manage Products</button>
+                <button class="tab-btn" data-tab="settingsTab">Store Settings (Phone/WhatsApp)</button>
+            </div>
+
+            <!-- Tab 1: Products Manager -->
+            <div class="tab-pane active" id="manageProducts">
+                <div class="add-product-form">
+                    <h4>Add New Wholesale Product</h4>
+                    <form id="addProductForm">
+                        <input type="text" id="pName" placeholder="Product Name (e.g. AME All-in-One Cable)" required>
+                        <select id="pCategory" required>
+                            <option value="Displays">LCD / Displays</option>
+                            <option value="Chargers">Chargers & Cables</option>
+                            <option value="Batteries">Mobile Batteries</option>
+                            <option value="Smart Watches">Smart Watches</option>
+                            <option value="Power Banks">Power Banks</option>
+                            <option value="Speakers">Speakers & Audio</option>
+                            <option value="Gamepads">Gamepads & Controllers</option>
+                            <option value="Back Covers">Back Covers & Glass</option>
+                        </select>
+                        <input type="number" id="pPrice" placeholder="Wholesale Price (₹)" required>
+                        <input type="number" id="pMinQty" placeholder="Minimum Wholesale Qty" value="5" required>
+                        <input type="text" id="pImage" placeholder="Image URL (Unsplash or direct image link)" required>
+                        <button type="submit" class="btn-primary">Add Product</button>
+                    </form>
+                </div>
+
+                <div class="inventory-list">
+                    <h4>Existing Catalog Inventory</h4>
+                    <div id="adminProductTable">
+                        <!-- Populated via JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 2: Settings -->
+            <div class="tab-pane" id="settingsTab">
+                <h4>Store Contact Settings</h4>
+                <form id="settingsForm">
+                    <label>WhatsApp Order Number (with country code, e.g. 919888136663):</label>
+                    <input type="text" id="settingWhatsapp" required>
+
+                    <label>Support Phone Number Displayed on Site:</label>
+                    <input type="text" id="settingPhone" required>
+
+                    <button type="submit" class="btn-primary">Save Settings</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container footer-content">
+            <div>
+              <h3>AKG WHOLESALE STORE</h3>
+              <p>Your ultimate B2B destination for mobile repair parts, accessories, and electronic components.</p>
+            </div>
+            <div>
+              <h4>Quick Links</h4>
+              <p><a href="#" id="footerAdminLink" style="color: #f1c40f;">Admin Dashboard Login</a></p>
+              <p>Pan India Delivery</p>
+              <p>Bulk Inquiry Support</p>
+            </div>
+            <div>
+              <h4>Contact Info</h4>
+              <p><i class="fas fa-phone"></i> <span id="footerPhone">+91 98881-36663</span></p>
+              <p><i class="fas fa-envelope"></i> supportakgwholesalestore@gmail.com</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 akgwholesalestore.com. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

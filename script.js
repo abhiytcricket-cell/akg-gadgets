@@ -1,21 +1,9 @@
-// Default Initial Data with New Categories
-const defaultProducts = [
-    { id: 1, name: "AMOLED Display for iPhone 13 Pro", category: "Displays", price: 6500, moq: 2, image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=500&q=80" },
-    { id: 2, name: "65W Fast Wall Charger (Type-C QC 3.0)", category: "Chargers", price: 350, moq: 10, image: "https://images.unsplash.com/photo-1583863788434-e58a36330cf0?auto=format&fit=crop&w=500&q=80" },
-    { id: 3, name: "Original Capacity Battery for Samsung M31", category: "Batteries", price: 450, moq: 5, image: "https://images.unsplash.com/photo-1609592424104-97d4b4f53c05?auto=format&fit=crop&w=500&q=80" },
-    { id: 4, name: "Bluetooth Calling Smart Watch Ultra", category: "Smart Watches", price: 1150, moq: 5, image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=500&q=80" },
-    { id: 5, name: "20000mAh Fast Charging Power Bank", category: "Power Banks", price: 850, moq: 5, image: "https://images.unsplash.com/photo-1609592424104-97d4b4f53c05?auto=format&fit=crop&w=500&q=80" },
-    { id: 6, name: "Portable Waterproof Bluetooth Speaker", category: "Speakers", price: 600, moq: 5, image: "https://images.unsplash.com/photo-1545454675-3531b543be5d?auto=format&fit=crop&w=500&q=80" },
-    { id: 7, name: "Wireless Mobile Gaming Gamepad Controller", category: "Gamepads", price: 750, moq: 5, image: "https://images.unsplash.com/photo-1600080972464-8e5f35f63d08?auto=format&fit=crop&w=500&q=80" },
-    { id: 8, name: "Liquid Silicone Back Cover (Bulk Mix)", category: "Back Covers", price: 60, moq: 25, image: "https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?auto=format&fit=crop&w=500&q=80" }
-];
+// --- CLOUD BIN CONFIGURATION ---
+const BIN_ID = "6ab64b66ac6210605af3e264";       // Replace with your JSONBin ID
+const API_KEY = "$2a$10$BvsQyJU6l9KtgFNhEgdyGu1TqfSS6NXs.TiKwWmzu0cj6AxI6U0HS";   // Replace with your JSONBin Master Key
 
-// Load State from LocalStorage or Defaults
-let products = JSON.parse(localStorage.getItem('akg_products')) || defaultProducts;
-let storeSettings = JSON.parse(localStorage.getItem('akg_settings')) || {
-    whatsapp: "919888136663",
-    phone: "+91 98881-36663"
-};
+let products = [];
+let storeSettings = { whatsapp: "919888136663", phone: "+91 98881-36663" };
 let cart = [];
 let currentFilter = 'all';
 
@@ -50,11 +38,44 @@ const footerPhone = document.getElementById('footerPhone');
 const whatsappBtn = document.getElementById('whatsappBtn');
 const floatingWhatsapp = document.getElementById('floatingWhatsapp');
 
-// Initialize App
-function initApp() {
+// Initialize App by Fetching from Cloud
+async function initApp() {
+    await fetchFromCloud();
     renderProducts();
     updateContactInfo();
     setupEventListeners();
+}
+
+// Fetch Data from JSONBin Cloud
+async function fetchFromCloud() {
+    try {
+        const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+            headers: { 'X-Master-Key': API_KEY }
+        });
+        const data = await response.json();
+        products = data.record.products || [];
+        storeSettings = data.record.settings || storeSettings;
+    } catch (error) {
+        console.error("Error fetching cloud data:", error);
+        alert("Failed to load live data from cloud. Check your internet connection.");
+    }
+}
+
+// Save Data to JSONBin Cloud
+async function saveToCloud() {
+    try {
+        await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Master-Key': API_KEY
+            },
+            body: JSON.stringify({ products, settings: storeSettings })
+        });
+    } catch (error) {
+        console.error("Error saving to cloud:", error);
+        alert("Failed to sync changes to cloud.");
+    }
 }
 
 // Render Products Catalog
@@ -182,7 +203,6 @@ function setupEventListeners() {
         overlay.classList.remove('active');
     });
 
-    // Search
     searchBtn.addEventListener('click', () => {
         renderProducts(currentFilter, searchInput.value);
     });
@@ -190,7 +210,6 @@ function setupEventListeners() {
         renderProducts(currentFilter, searchInput.value);
     });
 
-    // Categories Navigation
     categoryNav.addEventListener('click', (e) => {
         if (e.target.tagName === 'A') {
             e.preventDefault();
@@ -201,7 +220,6 @@ function setupEventListeners() {
         }
     });
 
-    // Checkout via WhatsApp
     checkoutBtn.addEventListener('click', () => {
         if (cart.length === 0) {
             alert('Your cart is empty.');
@@ -224,9 +242,8 @@ function setupEventListeners() {
     // Admin Modal Controls with Password Protection
     const openAdmin = (e) => {
         e.preventDefault();
-        
         const passwordInput = prompt("Enter Admin Secret Password:");
-        const secureAdminPassword = "Unisoasi@1980"; 
+        const secureAdminPassword = "Akgholesale@123"; 
 
         if (passwordInput === secureAdminPassword) {
             adminModal.classList.add('active');
@@ -244,7 +261,6 @@ function setupEventListeners() {
         overlay.classList.remove('active');
     });
 
-    // Admin Tabs Switching
     document.querySelectorAll('.tab-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -254,8 +270,8 @@ function setupEventListeners() {
         });
     });
 
-    // Add Product Form Handler
-    addProductForm.addEventListener('submit', (e) => {
+    // Add Product Form Handler (Saves to Cloud)
+    addProductForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const newProd = {
             id: Date.now(),
@@ -267,21 +283,21 @@ function setupEventListeners() {
         };
 
         products.push(newProd);
-        localStorage.setItem('akg_products', JSON.stringify(products));
+        await saveToCloud();
         renderProducts(currentFilter, searchInput.value);
         renderAdminInventory();
         addProductForm.reset();
-        alert('Product added successfully!');
+        alert('Product added and synced to cloud successfully!');
     });
 
-    // Save Settings Handler
-    settingsForm.addEventListener('submit', (e) => {
+    // Save Settings Handler (Saves to Cloud)
+    settingsForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         storeSettings.whatsapp = settingWhatsapp.value;
         storeSettings.phone = settingPhone.value;
-        localStorage.setItem('akg_settings', JSON.stringify(storeSettings));
+        await saveToCloud();
         updateContactInfo();
-        alert('Store settings updated successfully!');
+        alert('Store settings updated and synced to cloud!');
     });
 }
 
@@ -302,11 +318,11 @@ function renderAdminInventory() {
     });
 }
 
-// Delete Product
-function deleteProduct(id) {
+// Delete Product & Sync Cloud
+async function deleteProduct(id) {
     if (confirm('Are you sure you want to delete this product?')) {
         products = products.filter(p => p.id !== id);
-        localStorage.setItem('akg_products', JSON.stringify(products));
+        await saveToCloud();
         renderProducts(currentFilter, searchInput.value);
         renderAdminInventory();
     }
